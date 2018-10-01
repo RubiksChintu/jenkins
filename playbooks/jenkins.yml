@@ -1,0 +1,29 @@
+---
+- hosts: 192.168.0.36
+  tasks:
+    - name: install openjdk
+      yum: name=java-1.8.0-openjdk state=present
+
+    - name: install wget
+      yum: name=wget state=present
+
+    - name: download jenkins repo
+      get_url: url=http://pkg.jenkins-ci.org/redhat/jenkins.repo dest=/etc/yum.repos.d/jenkins.repo
+
+    - name: import key
+      rpm_key: state=present key=https://jenkins-ci.org/redhat/jenkins-ci.org.key
+
+    - name: install jenkins
+      yum: name=jenkins state=present
+
+    - name: start jenkins
+      service: name=jenkins state=started
+
+    - name: enables jenkins
+      service: name=jenkins  enabled=yes
+
+    - name: disable selinux
+      selinux: state=disabled
+
+#    - name: disable firewalld
+#      firewalld: state=disabled   
